@@ -4,12 +4,14 @@
 
 Serial Port Debug Assistant is a serial communication tool developed by the SUNTEK team for Android devices, supporting communication and debugging with LED controllers and barcode scanners through serial ports.
 
+**v2.0 New Feature**: LED Color Controller - Visual color picker with real-time color comparison and hex color matching!
+
 ## Port Description
 
 This application supports two serial port devices:
 
 - **ttyS5** - LED Controller Serial Port
-  - Used for controlling LED display, brightness adjustment, and other operations
+  - Used for controlling LED display, brightness adjustment, color settings, and other operations
   - Baud rate: 9600
 
 - **ttyS11** - Barcode Scanner Serial Port
@@ -50,7 +52,45 @@ This application supports two serial port devices:
 - Each sent data will be displayed in the receive area with a timestamp
 - Displays the number of bytes sent after successful transmission
 
-### 6. Other Features
+### 6. LED Color Controller (New Feature)
+Click the **"LED Color Controller"** button on the main interface to enter the LED color controller:
+
+#### 6.1 Target Color Input
+- Supports input of hex color values: `RRGGBB` or `#RRGGBB` (e.g., `FF0000` or `#FF0000`)
+- Click "Apply" button to apply the target color
+- When applied, the entire interface background changes to the target color for easy comparison
+- "Use as Current" button copies the current LED color to the target
+
+#### 6.2 Color Comparison Display
+- Side-by-side display of two circular color swatches:
+  - **Target** - User-input hex color
+  - **LED** - Current color being sent to the LED strip
+- Color difference value displayed below: `Color difference: R:xx G:xx B:xx`
+- Difference value color coding:
+  - 🟢 Green: Perfect match (difference = 0)
+  - 🟠 Orange: Slight difference (difference < 30)
+  - 🔴 Red: Significant difference (difference ≥ 30)
+
+#### 6.3 HSB Color Picker
+- **Hue**: 0-360° slider for selecting base color
+- **Saturation**: 0-100% slider
+- **Brightness**: 0-100% slider
+
+#### 6.4 RGB Precision Adjustment
+- Independent R/G/B sliders, range 0-255
+- Real-time display of each channel value
+- Colors are sent to LED strip in real-time when dragging sliders
+
+#### 6.5 Quick Color Buttons
+- 8 preset color buttons: Red, Green, Blue, White, Yellow, Cyan, Magenta, Off
+- One-click selection of common colors
+
+#### 6.6 HEX Command Display
+- Real-time display of current color's hex command (e.g., `FF 00 00`)
+- Shows send status and timestamp
+- "LED OFF" button to turn off the LED strip
+
+### 7. Other Features
 - **Clear Receive**: Clear all data in the receive area
 - **Status Display**: Bottom displays current connection status and error messages
 - **Auto Check**: Automatically checks if port devices exist on startup
@@ -86,6 +126,36 @@ This application supports two serial port devices:
 6. **Close Serial Port**
    - After debugging is complete, click the "Close Serial Port" button
    - Disconnect the serial port connection
+
+### Using LED Color Controller
+
+1. **Enter Color Controller**
+   - Click the **"LED Color Controller"** button on the main interface
+
+2. **Connect Serial Port**
+   - Select `/dev/ttyS5` port
+   - Click "Open" button to open the serial port
+
+3. **Set Target Color**
+   - Enter hex color value in "Target Color" input field (e.g., `3A57DF`)
+   - Click "Apply" - the interface background changes to the target color
+   - Now you can visually compare the target color with the actual LED color
+
+4. **Adjust LED Color**
+   - Method 1: Drag HSB sliders to adjust hue, saturation, brightness
+   - Method 2: Drag R/G/B sliders for precise channel adjustment
+   - Method 3: Click quick color buttons for preset colors
+   - Colors are automatically sent to the LED strip in real-time
+
+5. **Compare Color Difference**
+   - Observe the two color swatches in "Color Comparison" area
+   - Check the difference value below to judge matching degree
+   - When difference is 0, LED color perfectly matches the target
+
+6. **Send Color to LED**
+   - Adjusted colors are automatically sent (100ms debounce)
+   - Or click "Send to LED" button to manually send
+   - HEX Command area displays the current hex command being sent
 
 ### Connecting to Barcode Scanner (ttyS11)
 
@@ -126,12 +196,22 @@ This application supports two serial port devices:
 - Automatically filters spaces and case
 - Suitable for sending binary data or protocol data packets
 
+### LED Color Command Format
+- Set color: `RR GG BB` (3-byte RGB values)
+- Examples:
+  - Red: `FF 00 00`
+  - Green: `00 FF 00`
+  - Blue: `00 00 FF`
+  - White: `FF FF FF`
+  - Off: `00 00 00`
+
 ### Received Data Display
 - **Text Mode**: Printable characters display normally, non-printable characters displayed in `[XX]` format
 - **Hex Mode**: All data displayed in hexadecimal, such as: `01 02 03 FF`
 
 ## Interface Description
 
+### Main Interface
 ```
 ┌─────────────────────────┐
 │   Serial Port Debug     │
@@ -140,6 +220,7 @@ This application supports two serial port devices:
 │ Port: [ttyS5 ▼]        │
 │ Baud Rate: [9600]       │
 │ [Open Serial Port]      │
+│ [LED Color Controller]  │
 ├─────────────────────────┤
 │ Receive Area:           │
 │ ┌─────────────────────┐ │
@@ -156,6 +237,39 @@ This application supports two serial port devices:
 ├─────────────────────────┤
 │ Status: Connected       │
 └─────────────────────────┘
+```
+
+### LED Color Controller Interface
+```
+┌───────────────────────────────┐
+│   LED Color Controller        │
+├───────────────────────────────┤
+│ Target Color: [______] [Apply]│
+│ Target: [■] #RRGGBB           │
+├───────────────────────────────┤
+│ Color Comparison:             │
+│ [Target]  │  [LED]           │
+│ Diff: R:0 G:0 B:0             │
+├───────────────────────────────┤
+│ Port: [ttyS5 ▼] [Open]        │
+│ Status: Connected             │
+├───────────────────────────────┤
+│ [■] Color Preview             │
+├───────────────────────────────┤
+│ Hue:        [====●====] 0°    │
+│ Saturation: [====●====] 100%  │
+│ Brightness: [====●====] 100%  │
+├───────────────────────────────┤
+│ R: [====●====] 255            │
+│ G: [====●====] 0              │
+│ B: [====●====] 0              │
+├───────────────────────────────┤
+│ HEX: FF 00 00                 │
+│ [Send to LED] [LED OFF]       │
+├───────────────────────────────┤
+│ [R][G][B][W]                  │
+│ [Y][C][M][OFF]                │
+└───────────────────────────────┘
 ```
 
 ## Important Notes
@@ -190,7 +304,7 @@ This application supports two serial port devices:
 ## Frequently Asked Questions
 
 ### Q1: Port shows "Unavailable", unable to open serial port
-**A:** 
+**A:**
 - Check if device files exist: `/dev/ttyS5` or `/dev/ttyS11`
 - Check if the application has access permissions
 - Try running the application with root permissions
@@ -220,7 +334,14 @@ This application supports two serial port devices:
 - Ensure every two characters represent one byte (00-FF)
 - Check for illegal characters
 
-### Q6: Application crashes or unresponsive
+### Q6: LED color doesn't match target color
+**A:**
+- Check the color difference value to judge the deviation
+- Fine-tune R/G/B sliders to reduce the difference
+- Note that LED physical characteristics may cause color deviation
+- Compare colors under the same lighting environment
+
+### Q7: Application crashes or unresponsive
 **A:**
 - Close serial port before exiting the application
 - Clear application data and reinstall
@@ -240,6 +361,14 @@ This application supports two serial port devices:
 2. Switch to Hex mode (click "Hex Send")
 3. Input LED control command hexadecimal data
 4. Send data, LED displays corresponding content
+
+### Example 3: Match Target Color
+1. Enter LED Color Controller interface
+2. Open serial port to connect to ttyS5
+3. Enter `#3A57DF` in Target Color input
+4. Click Apply - interface background changes to target color
+5. Drag R/G/B sliders and observe the color difference value
+6. When difference is 0, LED color perfectly matches target
 
 ## Barcode Scanner Usage Examples
 
@@ -265,10 +394,10 @@ If you encounter problems or need technical support, please:
 ## Version Information
 
 - Application Name: Serial Port Debug Assistant
-- Version: 1.0
-- Update Date: 2026.1.9
+- Version: 2.0
+- Update Date: 2026.3.11
+- New Features: LED Color Controller (Visual color picker, Color comparison, Hex matching)
 
 ---
 
 **Note**: Before using serial port communication, please ensure you understand the communication protocols of the LED controller and barcode scanner. Refer to relevant technical documentation.
-

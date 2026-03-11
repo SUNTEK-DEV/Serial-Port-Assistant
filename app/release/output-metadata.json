@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.xie.myapplication",
+  "applicationId": "com.suntek.colorprobe",
   "variantName": "release",
   "elements": [
     {

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.xie.camerause'
+    namespace 'com.suntek.camerause'
     compileSdk 36
 
     defaultConfig {

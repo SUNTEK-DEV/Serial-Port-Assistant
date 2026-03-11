@@ -16,7 +16,7 @@ static int s_fd = -1;
 extern "C" {
 
 JNIEXPORT jint JNICALL
-Java_com_xie_myapplication_SerialPort_open(JNIEnv *env, jobject thiz, jstring path, jint baudrate) {
+Java_com_suntek_colorprobe_SerialPort_open(JNIEnv *env, jobject thiz, jstring path, jint baudrate) {
     const char *path_utf = env->GetStringUTFChars(path, nullptr);
     if (path_utf == nullptr) {
         return -1;
@@ -104,7 +104,7 @@ Java_com_xie_myapplication_SerialPort_open(JNIEnv *env, jobject thiz, jstring pa
 }
 
 JNIEXPORT jint JNICALL
-Java_com_xie_myapplication_SerialPort_close(JNIEnv *env, jobject thiz) {
+Java_com_suntek_colorprobe_SerialPort_close(JNIEnv *env, jobject thiz) {
     if (s_fd != -1) {
         close(s_fd);
         s_fd = -1;
@@ -115,7 +115,7 @@ Java_com_xie_myapplication_SerialPort_close(JNIEnv *env, jobject thiz) {
 }
 
 JNIEXPORT jint JNICALL
-Java_com_xie_myapplication_SerialPort_write(JNIEnv *env, jobject thiz, jbyteArray buffer) {
+Java_com_suntek_colorprobe_SerialPort_write(JNIEnv *env, jobject thiz, jbyteArray buffer) {
     if (s_fd == -1) {
         LOGE("Port not opened");
         return -1;
@@ -139,7 +139,7 @@ Java_com_xie_myapplication_SerialPort_write(JNIEnv *env, jobject thiz, jbyteArra
 }
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_xie_myapplication_SerialPort_read(JNIEnv *env, jobject thiz, jint maxSize) {
+Java_com_suntek_colorprobe_SerialPort_read(JNIEnv *env, jobject thiz, jint maxSize) {
     if (s_fd == -1) {
         LOGE("Port not opened");
         return nullptr;

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.xie.myapplication'
+    namespace 'com.suntek.colorprobe'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.xie.myapplication"
+        applicationId "com.suntek.colorprobe"
         minSdk 30
         targetSdk 36
         versionCode 1

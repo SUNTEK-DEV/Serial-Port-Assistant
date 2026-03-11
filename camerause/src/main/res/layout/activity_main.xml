@@ -8,7 +8,7 @@
     android:background="#000000"
     tools:context=".MainActivity">
 
-    <com.xie.camerause.AutoFitTextureView
+    <com.suntek.camerause.AutoFitTextureView
         android:id="@+id/textureView"
         android:layout_width="0dp"
         android:layout_height="0dp"
